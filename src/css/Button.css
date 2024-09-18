@@ -1,0 +1,61 @@
+Button {
+    padding : 12px;
+    font-size : 16px;
+    border: none;
+    border-radius : 12px;
+    cursor : pointer;
+}
+
+/* 구매 */
+.buyButton {
+    color:white;
+    background-color: rgb(57, 137, 236);
+    box-shadow: 0px 0px 2px 2px rgb(48, 119, 206);
+}
+.buyButton:active {
+    background-color: rgb(50, 120, 205);
+}
+
+
+/* 초기화 */
+.restartButton {
+    background-color: white;
+    box-shadow: 0px 0px 2px 2px rgb(48, 119, 206);
+    margin-left: auto;
+}
+.restartButton:active {
+    box-shadow: 0px 0px 2px 2px rgb(32, 83, 146);
+}
+
+
+/* 번호 확인 */
+.ResultNumberButton {
+    background-color: white;
+    box-shadow: 0px 0px 2px 2px rgb(224, 98, 79);
+}
+.ResultNumberButton:active {
+    box-shadow: 0px 0px 2px 2px rgb(165, 69, 54);
+}
+
+
+/* 결과 확인 */
+.ResultModalButton {
+    color: white;
+    background-color: rgb(224, 98, 79);
+    box-shadow: 0px 0px 2px 2px rgb(186, 58, 39);
+}
+.ResultModalButton:active {
+    background-color: rgb(205, 88, 70);
+}
+
+
+/* 모달 닫기 */
+.modalCloseButton {
+    background-color: rgb(222, 222, 222);
+    box-shadow: 0px 0px 2px 2px rgb(208, 208, 208);
+}
+
+.modalCloseButton:active {
+    background-color: rgb(207, 207, 207);
+    box-shadow: 0px 0px 2px 2px rgb(195, 195, 195);
+}

@@ -1,0 +1,12 @@
+.resultNumberWrapper {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1vw;
+    align-items: center;
+}
+
+.plusText {
+    font-size: 3vw;
+}
