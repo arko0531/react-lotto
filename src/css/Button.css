@@ -6,6 +6,18 @@ Button {
     cursor : pointer;
 }
 
+
+/* 번호 저장 */
+.numberSave {
+    background-color: rgba(248, 251, 109, 0.834);
+    box-shadow: 0px 0px 2px 2px rgb(220, 222, 138);
+}
+.numberSave:active {
+    background-color: rgba(251, 253, 113, 0.834);
+    box-shadow: 0px 0px 2px 2px rgb(196, 197, 122);
+}
+
+
 /* 구매 */
 .buyButton {
     color:white;

@@ -21,3 +21,7 @@
     flex-direction: row;
     gap: 1vw;
 }
+
+.lottoControlNone {
+    display: none;
+}
