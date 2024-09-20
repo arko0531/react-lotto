@@ -5,6 +5,7 @@ class InputNumber extends Component {
     handleChange = (event) => {
         const { onChangeNumber, index} = this.props;
         const value = event.target.value;
+        
         if (value === '' || (Number(value) >= 1 && Number(value) <= 45)) {
             onChangeNumber(value, index);
         }

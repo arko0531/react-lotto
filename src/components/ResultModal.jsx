@@ -4,6 +4,8 @@ import Button from "./ui/Button";
 
 class ResultModal extends Component {
     render() {
+        const {onCloseModal} = this.props;
+
         return(
             <div className="modalWrapper">
                 <div className="modalContent">
@@ -55,9 +57,7 @@ class ResultModal extends Component {
                         <Button 
                             title = "닫기"
                             className = "modalCloseButton"
-                            // onClick = {
-
-                            // }
+                            onClick = {onCloseModal}
                         />
                     </div>
                 </div>           

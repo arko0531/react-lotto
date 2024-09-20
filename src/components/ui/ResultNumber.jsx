@@ -3,9 +3,11 @@ import "../../css/ResultNumber.css"
 
 class ResultNumber extends Component {
     render() {
+        const {number} = this.props;
+
         return(
             <div className="resultNumber">
-                1
+                {number}
             </div>
         );
     }

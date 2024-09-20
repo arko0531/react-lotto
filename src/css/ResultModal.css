@@ -9,7 +9,7 @@
     align-items: center;
     background: rgba(0, 0, 0, 0.5);
 
-    display: none; 
+    /* display: none;  */
 }
 
 .modalContent {
