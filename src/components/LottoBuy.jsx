@@ -4,7 +4,7 @@ import Button from "./ui/Button";
 
 class LottoBuy extends Component {
     render() {
-        const { price, lottoControl, onLottoBuy, onPriceChange, onHistoryVisible, onOpenModal } = this.props;
+        const { price, lottoControl, onLottoBuy, onPriceChange, onHistoryVisible, onOpenModal, onReset } = this.props;
         const contorlvisible = lottoControl ? "" : "lottoControlNone";     
 
         return(
@@ -42,7 +42,7 @@ class LottoBuy extends Component {
                         <Button 
                             title = "초기화"
                             className = "restartButton"
-                            //onClick = {}
+                            onClick = {onReset}
                         />      
                     </div>         
                 </div>

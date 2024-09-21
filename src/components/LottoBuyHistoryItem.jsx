@@ -7,19 +7,12 @@ class LottoBuyHistoryItem extends Component {
         
         return(
             <div className="resultNumberWrapper">
-                {resultNum.slice(0, 6).map((num, index) => (
+                {resultNum.map((num, index) => (
                 <ResultNumber
                     key={index}
                     number={num}
                 />
                 ))}
-
-                <div className="plusText">+</div>
-
-                <ResultNumber 
-                    key={6}
-                    number={resultNum[6]}
-                />
             </div>
         );
     }

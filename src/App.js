@@ -11,11 +11,18 @@ class App extends Component {
     this.state = {
       price: '',
       lottoControl: false,
-      historyControl : false,
-      ticketCount : 0,
+      historyControl: false,
+      ticketCount: 0,
       resultNumberSet: [],
       inputNumbers: Array(7).fill(''),
-      isModal: false
+      isModal: false,
+      totalRank: {
+        firstClass: 0,
+        secondClass: 0,
+        thirdClass: 0,
+        fourthClass: 0,
+        fifthClass: 0
+      }
     }
   }
 
@@ -104,7 +111,7 @@ class App extends Component {
     for (let i = 0; i < ticketCount; i++) {
       const numbers = new Set(); // 중복 제거    
 
-      for (let j = 0; numbers.size < 7; j++) {
+      for (let j = 0; numbers.size < 6; j++) {
         const randomNum = Math.floor(Math.random() * 45 + 1);
         numbers.add(randomNum);
       }
@@ -113,22 +120,85 @@ class App extends Component {
     
     console.log('생성된 로또 번호: ', numbersSetArray); // 확인용
 
-    this.setState({resultNumberSet : numbersSetArray}); 
-
     return numbersSetArray;
   }
 
   // 모달
   handleOpenModal = () => {
-    this.setState({isModal : true});
+    const totalRank = this.totalRank();
+
+    this.setState({
+      isModal : true,
+      totalRank : totalRank
+    }); 
   }
   handleCloseModal = () => {
     this.setState({isModal : false});
   }
 
+  // 순위 계산
+  totalRank = () => {
+    const {inputNumbers, resultNumberSet} = this.state;
+
+    const inputMainNumbers = inputNumbers.slice(0, 6).map(Number); // 입력한 번호
+    const inputBonusNumber = Number(inputNumbers[6]);
+
+    console.log("입력한 로또 번호 : " + inputMainNumbers + " + " + inputBonusNumber); // 확인용
+
+    const results = {
+      firstClass: 0,
+      secondClass: 0,
+      thirdClass: 0,
+      fourthClass: 0,
+      fifthClass: 0
+    }
+
+    for (let i = 0; i < resultNumberSet.length; i++) {
+      const numbers = resultNumberSet[i]; // 구매한 번호
+
+      console.log("구매한 로또 번호 : " + numbers); // 확인용
+
+      const totalCount = inputMainNumbers.filter(number => numbers.includes(number)).length;
+
+      if (totalCount === 6) {
+        results.firstClass += 1;
+      } else if (totalCount === 5 && numbers.includes(inputBonusNumber)) {
+        results.secondClass += 1;
+      } else if (totalCount === 5) {
+        results.thirdClass += 1;
+      } else if (totalCount === 4) {
+        results.fourthClass += 1;
+      } else if (totalCount === 3) {
+        results.fifthClass += 1;
+      }
+    }
+    console.log(results); // 확인용
+    return results;
+  }
+
+  // 초기화
+  handleReset = () => {
+    this.setState({
+      price: '',
+      lottoControl: false,
+      historyControl: false,
+      ticketCount: 0,
+      resultNumberSet: [],
+      inputNumbers: Array(7).fill(''),
+      isModal: false,
+      totalRank: {
+        firstClass: 0,
+        secondClass: 0,
+        thirdClass: 0,
+        fourthClass: 0,
+        fifthClass: 0
+      }
+    })
+  }
+
 
   render() {
-    const {price, lottoControl, historyControl, ticketCount, resultNumberSet, inputNumbers, isModal} = this.state;
+    const {price, lottoControl, historyControl, ticketCount, resultNumberSet, inputNumbers, isModal, totalRank} = this.state;
     const historyVisible = historyControl ? "" : "historyVisibleNone";
     const modalVisible = isModal ? "" : "modalVisibleNone";
 
@@ -147,6 +217,7 @@ class App extends Component {
           onLottoBuy={this.handleLottoBuy}
           onPriceChange={this.handlePriceChange}
           onOpenModal={this.handleOpenModal}
+          onReset = {this.handleReset}
         />
         <div className={historyVisible}>
           <LottoBuyHistory 
@@ -157,6 +228,9 @@ class App extends Component {
         <div className={modalVisible}>
           <ResultModal 
             onCloseModal={this.handleCloseModal}
+            totalRank={totalRank}
+            price={price}
+            ticketCount={ticketCount}
           />
         </div>     
       </div>
