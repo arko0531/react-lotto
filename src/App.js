@@ -125,6 +125,11 @@ class App extends Component {
 
   // 모달
   handleOpenModal = () => {
+    if (this.state.inputNumbers[0] === '') {
+      alert('당첨 번호를 입력해 주세요.');
+      return;
+    }
+
     const totalRank = this.totalRank();
 
     this.setState({
