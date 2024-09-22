@@ -1,16 +1,15 @@
-import { Component } from "react";
+import React from "react";
 import "../../css/ResultNumber.css"
 
-class ResultNumber extends Component {
-    render() {
-        const {number} = this.props;
+function ResultNumber(props) {
+    const {number} = props;
 
-        return(
-            <div className="resultNumber">
-                {number}
-            </div>
-        );
-    }
+    return(
+        <div className="resultNumber">
+            {number}
+        </div>
+    );
+    
 }
 
 export default ResultNumber;

@@ -1,42 +1,35 @@
 import './App.css';
-import { Component } from "react";
+import React, { useState } from "react";
 import LottoNumber from './components/LottoNumber';
 import LottoBuy from './components/LottoBuy';
 import LottoBuyHistory from './components/LottoBuyHistory';
 import ResultModal from './components/ResultModal';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      price: '',
-      lottoControl: false,
-      historyControl: false,
-      ticketCount: 0,
-      resultNumberSet: [],
-      inputNumbers: Array(7).fill(''),
-      isModal: false,
-      totalRank: {
-        firstClass: 0,
-        secondClass: 0,
-        thirdClass: 0,
-        fourthClass: 0,
-        fifthClass: 0
-      }
-    }
-  }
+function App() {
+  const [price, setPrice] = useState('');
+  const [lottoControl, setLottoControl] = useState(false);
+  const [historyControl, setHistoryControl] = useState(false);
+  const [ticketCount, setTicketCount] = useState(0);
+  const [resultNumberSet, setResultNumberSet] = useState([]);
+  const [inputNumbers, setInputNumbers] = useState(Array(7).fill(''));
+  const [isModal, setIsModal] = useState(false);
+  const [totalRank, setTotalRank] = useState({
+    firstClass: 0,
+    secondClass: 0,
+    thirdClass: 0,
+    fourthClass: 0,
+    fifthClass: 0
+  });
 
   // 로또 번호 값 변경 시
-  handleChangeNumber = (value, index) => {
-    const {inputNumbers} = this.state;
+  const handleChangeNumber = (value, index) => {
     const numbers = [...inputNumbers];
     numbers[index] = value;
-    this.setState({inputNumbers : numbers})
+    setInputNumbers(numbers);
   }
 
   // 로또 번호 저장
-  handleSubmit = () => {
-      const {inputNumbers} = this.state;
+  const handleSubmit = () => {
       let emptyValue = false;
 
       for (let i = 0 ; i < inputNumbers.length; i++) {
@@ -62,50 +55,45 @@ class App extends Component {
 
 
   // 가격 변경 시
-  handlePriceChange = (event) => {
+  const handlePriceChange = (event) => {
     const value = event.target.value;
-    this.setState({price : value})
+    setPrice(value);
   }
 
   // 구매
-  handleLottoBuy = () => {
-    const price = Number(this.state.price);
+  const handleLottoBuy = () => {
+    const priceNumber = Number(price);
 
-    if (price % 1000 !== 0 || price <= 0) {
+    if (priceNumber % 1000 !== 0 || priceNumber <= 0) {
         alert("1,000원 단위로 금액을 입력해 주세요.");
         return;
     }
 
-    const ticketCount = price / 1000;
-    this.setState({
-        lottoControl : true
-    }); 
+    const ticketCount = priceNumber / 1000;
+    setLottoControl(true);
 
-    this.handleonTicketCount(ticketCount); // 구매한 개수 전달
+    handleonTicketCount(ticketCount); // 구매한 개수 전달
   }
 
 
   // 구매 버튼 클릭 시 활성화
-  handleHistoryVisible = () => {
-    this.setState({
-      historyControl : true,
-    })
+  const handleHistoryVisible = () => {
+    setHistoryControl(true);
   }
 
   // 구매한 개수
-  handleonTicketCount = (ticketCount) => {
-    this.setState({ ticketCount }, 
-      () => {
-      const resultNumberSet = this.randomNumbers(ticketCount);
-      this.setState({ resultNumberSet });
-    });
+  const handleonTicketCount = (ticketCount) => {
+    setTicketCount(ticketCount);
+
+    const resultNumberSet = randomNumbers(ticketCount);
+    setResultNumberSet(resultNumberSet);
     
     console.log(ticketCount + '장'); // 확인용
   }
 
 
   // 랜덤 번호
-  randomNumbers = (ticketCount) => {
+  const randomNumbers = (ticketCount) => {
     const numbersSetArray = []
 
     for (let i = 0; i < ticketCount; i++) {
@@ -124,27 +112,24 @@ class App extends Component {
   }
 
   // 모달
-  handleOpenModal = () => {
-    if (this.state.inputNumbers[0] === '') {
+  const handleOpenModal = () => {
+    if (inputNumbers[0] === '') {
       alert('당첨 번호를 입력해 주세요.');
       return;
     }
 
-    const totalRank = this.totalRank();
+    const totalRank = totalRankCalc();
 
-    this.setState({
-      isModal : true,
-      totalRank : totalRank
-    }); 
+    setIsModal(true);
+    setTotalRank(totalRank);
+
   }
-  handleCloseModal = () => {
-    this.setState({isModal : false});
+  const handleCloseModal = () => {
+    setIsModal(false);
   }
 
   // 순위 계산
-  totalRank = () => {
-    const {inputNumbers, resultNumberSet} = this.state;
-
+  const totalRankCalc = () => {
     const inputMainNumbers = inputNumbers.slice(0, 6).map(Number); // 입력한 번호
     const inputBonusNumber = Number(inputNumbers[6]);
 
@@ -182,28 +167,23 @@ class App extends Component {
   }
 
   // 초기화
-  handleReset = () => {
-    this.setState({
-      price: '',
-      lottoControl: false,
-      historyControl: false,
-      ticketCount: 0,
-      resultNumberSet: [],
-      inputNumbers: Array(7).fill(''),
-      isModal: false,
-      totalRank: {
-        firstClass: 0,
-        secondClass: 0,
-        thirdClass: 0,
-        fourthClass: 0,
-        fifthClass: 0
-      }
-    })
+  const handleReset = () => {
+    setPrice('');
+    setLottoControl(false);
+    setHistoryControl(false);
+    setTicketCount(0);
+    setResultNumberSet([]);
+    setInputNumbers(Array(7).fill(''));
+    setIsModal(false);
+    setTotalRank({
+      firstClass: 0,
+      secondClass: 0,
+      thirdClass: 0,
+      fourthClass: 0,
+      fifthClass: 0
+    });
   }
 
-
-  render() {
-    const {price, lottoControl, historyControl, ticketCount, resultNumberSet, inputNumbers, isModal, totalRank} = this.state;
     const historyVisible = historyControl ? "" : "historyVisibleNone";
     const modalVisible = isModal ? "" : "modalVisibleNone";
 
@@ -212,17 +192,17 @@ class App extends Component {
         <h1 className='title'>행운의 로또</h1>
         <LottoNumber 
           inputNumbers = {inputNumbers}
-          onChangeNumber = {this.handleChangeNumber}
-          onSubmit={this.handleSubmit}
+          onChangeNumber = {handleChangeNumber}
+          onSubmit={handleSubmit}
         />
         <LottoBuy 
           price = {price}
           lottoControl = {lottoControl}
-          onHistoryVisible = {this.handleHistoryVisible}
-          onLottoBuy={this.handleLottoBuy}
-          onPriceChange={this.handlePriceChange}
-          onOpenModal={this.handleOpenModal}
-          onReset = {this.handleReset}
+          onHistoryVisible = {handleHistoryVisible}
+          onLottoBuy={handleLottoBuy}
+          onPriceChange={handlePriceChange}
+          onOpenModal={handleOpenModal}
+          onReset = {handleReset}
         />
         <div className={historyVisible}>
           <LottoBuyHistory 
@@ -232,7 +212,7 @@ class App extends Component {
         </div>    
         <div className={modalVisible}>
           <ResultModal 
-            onCloseModal={this.handleCloseModal}
+            onCloseModal={handleCloseModal}
             totalRank={totalRank}
             price={price}
             ticketCount={ticketCount}
@@ -240,7 +220,6 @@ class App extends Component {
         </div>     
       </div>
     );
-  }
 }
 
 export default App;
