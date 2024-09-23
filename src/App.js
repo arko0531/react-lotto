@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LottoNumber from './components/LottoNumber';
 import LottoBuy from './components/LottoBuy';
 import LottoBuyHistory from './components/LottoBuyHistory';
@@ -18,8 +18,9 @@ function App() {
     secondClass: 0,
     thirdClass: 0,
     fourthClass: 0,
-    fifthClass: 0
+    fifthClass: 0,
   });
+  const [winningTimer, setWinningTimer] = useState('');
 
   // 로또 번호 값 변경 시
   const handleChangeNumber = (value, index) => {
@@ -50,7 +51,7 @@ function App() {
           return;
       }
 
-      console.log('저장된 번호:', inputNumbers); // 확인용
+      //console.log('저장된 번호:', inputNumbers); // 확인용
   }
 
 
@@ -88,7 +89,7 @@ function App() {
     const resultNumberSet = randomNumbers(ticketCount);
     setResultNumberSet(resultNumberSet);
     
-    console.log(ticketCount + '장'); // 확인용
+    //console.log(ticketCount + '장'); // 확인용
   }
 
 
@@ -106,7 +107,7 @@ function App() {
       numbersSetArray.push(Array.from(numbers)) // 배열 변환
     }
     
-    console.log('생성된 로또 번호: ', numbersSetArray); // 확인용
+    //console.log('생성된 로또 번호: ', numbersSetArray); // 확인용
 
     return numbersSetArray;
   }
@@ -133,7 +134,7 @@ function App() {
     const inputMainNumbers = inputNumbers.slice(0, 6).map(Number); // 입력한 번호
     const inputBonusNumber = Number(inputNumbers[6]);
 
-    console.log("입력한 로또 번호 : " + inputMainNumbers + " + " + inputBonusNumber); // 확인용
+    //console.log("입력한 로또 번호 : " + inputMainNumbers + " + " + inputBonusNumber); // 확인용
 
     const results = {
       firstClass: 0,
@@ -146,7 +147,7 @@ function App() {
     for (let i = 0; i < resultNumberSet.length; i++) {
       const numbers = resultNumberSet[i]; // 구매한 번호
 
-      console.log("구매한 로또 번호 : " + numbers); // 확인용
+      //console.log("구매한 로또 번호 : " + numbers); // 확인용
 
       const totalCount = inputMainNumbers.filter(number => numbers.includes(number)).length;
 
@@ -162,7 +163,7 @@ function App() {
         results.fifthClass += 1;
       }
     }
-    console.log(results); // 확인용
+    //console.log(results); // 확인용
     return results;
   }
 
@@ -182,7 +183,50 @@ function App() {
       fourthClass: 0,
       fifthClass: 0
     });
+    setWinningTimer('')
   }
+
+  // 당첨 발표까지 카운트다운 (매주 토요일 8시 35분)
+  const winningTimeCount = () => {
+    const now = new Date();
+    const winningTime = new Date();
+    const dayOfWeek = now.getDay();
+
+    const nextSaturday = 6 - dayOfWeek; // 토 : 6
+    winningTime.setDate(now.getDate() + nextSaturday);
+    winningTime.setHours(20);
+    winningTime.setMinutes(35);
+    winningTime.setSeconds(0);
+
+     if (now >= winningTime) { // 당첨 발표 이후면 다음주로
+       winningTime.setDate(winningTime.getDate() + 7);
+     }
+
+    const diff = winningTime - now;
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000); 
+
+    setWinningTimer(`${hours}시간 ${minutes}분 ${seconds}초`);
+        
+  }
+
+  useEffect(() => {
+    let timer;
+
+    if (lottoControl === true) {
+      //console.log('시간 측정'); // 확인용
+
+      winningTimeCount(); // 1초 딜레이
+      timer = setInterval(winningTimeCount, 1000);
+    } 
+    return () => {
+      clearInterval(timer);
+    }
+
+  }, [lottoControl]);
+
 
     const historyVisible = historyControl ? "" : "historyVisibleNone";
     const modalVisible = isModal ? "" : "modalVisibleNone";
@@ -203,6 +247,7 @@ function App() {
           onPriceChange={handlePriceChange}
           onOpenModal={handleOpenModal}
           onReset = {handleReset}
+          winningTimer = {winningTimer}
         />
         <div className={historyVisible}>
           <LottoBuyHistory 
