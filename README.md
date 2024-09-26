@@ -24,3 +24,9 @@
 
 - [ ] UI를 통해 **실시간으로** 당첨 번호 발표까지 남은 시간을 제공합니다.
 - [ ] 다시 시작하기 버튼을 누르면 당첨 번호 발표 시간도 사라진다.
+
+<br/><br/>
+
+<p align="middle">
+    <img src="https://github.com/user-attachments/assets/1c6bbf12-26bc-4073-a660-c0ae241b8d0f" alt="Lotto GIF" width="500"/>
+</p>
