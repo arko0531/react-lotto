@@ -25,7 +25,7 @@ function App() {
   // 로또 번호 값 변경 시
   const handleChangeNumber = (value, index) => {
     const numbers = [...inputNumbers];
-    numbers[index] = value;
+    numbers[index] = value.trim();
     setInputNumbers(numbers);
   }
 
@@ -58,7 +58,7 @@ function App() {
   // 가격 변경 시
   const handlePriceChange = (event) => {
     const value = event.target.value;
-    setPrice(value);
+    setPrice(value.trim());
   }
 
   // 구매
