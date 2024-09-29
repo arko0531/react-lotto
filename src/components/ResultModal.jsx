@@ -15,7 +15,11 @@ function ResultModal(props) {
     }
 
     // 총 당첨 금액
-    const totalPrizes = prizes.firstClass + prizes.secondClass + prizes.thirdClass + prizes.fourthClass + prizes.fifthClass;
+    const totalPrizes = (prizes.firstClass * totalRank.firstClass) + 
+                        (prizes.secondClass * totalRank.secondClass) + 
+                        (prizes.thirdClass * totalRank.thirdClass) + 
+                        (prizes.fourthClass * totalRank.fourthClass) + 
+                        (prizes.fifthClass * totalRank.fifthClass);
 
     // 수익률
     const profit = ((totalPrizes - price) / price) * 100;

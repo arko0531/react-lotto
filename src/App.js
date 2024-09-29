@@ -11,7 +11,8 @@ function App() {
   const [historyControl, setHistoryControl] = useState(false);
   const [ticketCount, setTicketCount] = useState(0);
   const [resultNumberSet, setResultNumberSet] = useState([]);
-  const [inputNumbers, setInputNumbers] = useState(Array(7).fill(''));
+  const [tempInputNumbers, setTempInputNumbers] = useState(Array(7).fill('')); // 임시 입력 번호
+  const [inputNumbers, setInputNumbers] = useState(Array(7).fill('')); // 실제 입력 번호
   const [isModal, setIsModal] = useState(false);
   const [totalRank, setTotalRank] = useState({
     firstClass: 0,
@@ -24,32 +25,26 @@ function App() {
 
   // 로또 번호 값 변경 시
   const handleChangeNumber = (value, index) => {
-    const numbers = [...inputNumbers];
+    const numbers = [...tempInputNumbers];
     numbers[index] = value.trim();
-    setInputNumbers(numbers);
+    setTempInputNumbers(numbers);
   }
 
   // 로또 번호 저장
-  const handleSubmit = () => {
-      let emptyValue = false;
+  const handleSubmit = () => {   
 
-      for (let i = 0 ; i < inputNumbers.length; i++) {
-          if (inputNumbers[i] === '') {
-              emptyValue = true;
-              break;  
-          }
-      }      
-
-      if (emptyValue) {
+    if (tempInputNumbers.includes('')) {
           alert('모든 번호를 입력해 주세요.');
           return;
       }
 
-      const numbersSet = new Set(inputNumbers); 
-      if (numbersSet.size !== inputNumbers.length) {
+      const numbersSet = new Set(tempInputNumbers); 
+      if (numbersSet.size !== tempInputNumbers.length) {
           alert('중복된 번호는 입력할 수 없습니다.');
           return;
       }
+
+      setInputNumbers(tempInputNumbers);
 
       //console.log('저장된 번호:', inputNumbers); // 확인용
   }
@@ -73,7 +68,7 @@ function App() {
     const ticketCount = priceNumber / 1000;
     setLottoControl(true);
 
-    handleonTicketCount(ticketCount); // 구매한 개수 전달
+    handleTicketCount(ticketCount); // 구매한 개수 전달
   }
 
 
@@ -83,7 +78,7 @@ function App() {
   }
 
   // 구매한 개수
-  const handleonTicketCount = (ticketCount) => {
+  const handleTicketCount = (ticketCount) => {
     setTicketCount(ticketCount);
 
     const resultNumberSet = randomNumbers(ticketCount);
@@ -114,7 +109,7 @@ function App() {
 
   // 모달
   const handleOpenModal = () => {
-    if (inputNumbers[0] === '') {
+    if (inputNumbers.includes('')) {
       alert('당첨 번호를 입력해 주세요.');
       return;
     }
@@ -174,6 +169,7 @@ function App() {
     setHistoryControl(false);
     setTicketCount(0);
     setResultNumberSet([]);
+    setTempInputNumbers(Array(7).fill(''));
     setInputNumbers(Array(7).fill(''));
     setIsModal(false);
     setTotalRank({
@@ -235,7 +231,7 @@ function App() {
       <div className='Wrapper'>
         <h1 className='title'>행운의 로또</h1>
         <LottoNumber 
-          inputNumbers = {inputNumbers}
+          inputNumbers = {tempInputNumbers}
           onChangeNumber = {handleChangeNumber}
           onSubmit={handleSubmit}
         />
