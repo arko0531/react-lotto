@@ -1,5 +1,4 @@
 import React from "react";
-import "../css/LottoBuyHistory.css"
 import LottoBuyHistoryItem from "./LottoBuyHistoryItem";
 
 function LottoBuyHistory (props) {
@@ -9,7 +8,7 @@ function LottoBuyHistory (props) {
         <div>
             <h3>로또 구매 내역</h3>
             <p>- {ticketCount}장 구매</p>
-            <div className="buyHistoryWrapper">
+            <div>
                 {resultNumberSet.map((resultNum, index) => (
                     <LottoBuyHistoryItem
                         key={index}

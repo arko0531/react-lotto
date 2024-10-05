@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
-import InputNumber from "./ui/InputNumber";
-import Button from "./ui/Button";
-import "../css/LottoNumber.css"
+import InputNumber from "../ui/InputNumber";
+import Button from "../ui/Button";
+import styled from "styled-components";
 
 function LottoNumber (props) {
     const {inputNumbers, onChangeNumber, onSubmit} = props;
@@ -21,7 +21,7 @@ function LottoNumber (props) {
     return(
         <div>
             <h3>당첨 번호 입력</h3>
-            <div className="numberWrapper">
+            <NumberWrapper>
                 {inputNumbers.slice(0,6).map((number, index) => (
                     <InputNumber 
                         key={index}
@@ -32,7 +32,7 @@ function LottoNumber (props) {
                         onKeyDown={(event) => handleKeyPress(event, index)}
                     />
                 ))}
-            <div className="plusText">+</div>
+            <PlusText>+</PlusText>
                 <InputNumber 
                     key={6}
                     inputNumber={inputNumbers[6]}
@@ -41,19 +41,38 @@ function LottoNumber (props) {
                     ref={el => (inputRef.current[6] = el)}
                     onKeyDown = {(event) => handleKeyPress(event, 6)}
                 />
-            </div>
-            <div className="prizeText">
+            </NumberWrapper>
+            <PrizeText>
                 <p>총 당첨금 : 30,000,000,000원</p>
 
                 <Button 
                     title="번호 저장"
-                    className="numberSave"
+                    role="submit"
                     onClick = {onSubmit}   
                 />
-            </div>
+            </PrizeText>
         </div>
     );
     
 }
 
 export default LottoNumber;
+
+
+const NumberWrapper = styled.div`
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1vw;
+    align-items: center;
+`
+
+const PlusText = styled.div`
+    font-size: 3vw;
+`
+
+const PrizeText = styled.div`
+    margin-top: 40px;
+    text-align: center;
+`

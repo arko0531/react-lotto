@@ -1,5 +1,5 @@
 import React, {forwardRef} from "react";
-import "../../css/InputNumber.css";
+import styled from "styled-components";
 
 const InputNumber = forwardRef((props, ref) => {
     const { inputNumber, onChangeNumber, index, onKeyDown } = props;
@@ -13,8 +13,7 @@ const InputNumber = forwardRef((props, ref) => {
     }
     
     return (
-        <input 
-            className="inputNumber" 
+        <StyledInputNumber 
             type="text" 
             value={inputNumber}
             onChange={handleChange}
@@ -26,3 +25,13 @@ const InputNumber = forwardRef((props, ref) => {
 })
 
 export default InputNumber;
+
+
+const StyledInputNumber = styled.input`
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50%;
+    border: 1px solid gray;
+    text-align: center;
+    font-size: 3vw;
+`
