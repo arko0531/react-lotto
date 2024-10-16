@@ -1,10 +1,8 @@
-import React from 'react'
-import Content from './components/contents/Content';
+import React from "react";
+import Lotto from "./components/lotto";
 
 function App() {
-    return (
-      <Content />
-    );
+  return <Lotto />;
 }
 
 export default App;
