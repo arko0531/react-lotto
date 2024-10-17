@@ -1,25 +1,29 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Button from "../ui/Button";
 import styled from "styled-components";
 import LottoBuyHistory from "./LottoBuyHistory";
 import ResultModal from "../modal/ResultModal";
-import LottoControl from "./LottoControl";
+import LottoControlBox from "./LottoControlBox";
 
-const LottoBuy = ({
-  priceState: { price, setPrice },
-  lottoResultNumberState: { lottoResultNumber, setLottoResultNumber },
-  inputNumbersState: { inputNumbers, setInputNumbers },
-}) => {
-  const [isShowLottoControl, setIsShowLottoControl] = useState(false);
-  const [isShowHistoryControl, setIsShowHistoryControl] = useState(false);
-  const [isOpenLottoResultModal, setIsOpenLottoResultModal] = useState(false);
-  const [totalRank, setTotalRank] = useState({
-    firstClass: 0,
-    secondClass: 0,
-    thirdClass: 0,
-    fourthClass: 0,
-    fifthClass: 0,
-  });
+import { useDispatch, useSelector } from "react-redux";
+import { uiActions } from "../store/reducers/ui";
+import { lottoNumbersActions } from "../store/reducers/lottoNumbers";
+import { priceActions } from "../store/reducers/price";
+
+const LottoBuy = () => {
+  const isShowLottoResultModalControl = useSelector(
+    (state) => state.ui.isShowLottoResultModalControl
+  );
+  const isShowHistoryControl = useSelector(
+    (state) => state.ui.isShowHistoryControl
+  );
+  const inputNumbersCheck = useSelector(
+    (state) => state.lottoNumbers.inputNumbersCheck
+  );
+
+  const price = useSelector((state) => state.price.price);
+
+  const dispatch = useDispatch();
 
   const focusRef = useRef();
 
@@ -40,6 +44,12 @@ const LottoBuy = ({
   };
 
   const LottoBuyHandler = () => {
+    // 번호 저장 안하면 구매 버튼 경고 뜨게 하기
+    if (!inputNumbersCheck) {
+      alert("저장 버튼을 눌러주세요.");
+      return;
+    }
+
     const priceNumber = Number(price);
 
     if (priceNumber % 1000 !== 0 || priceNumber <= 0) {
@@ -49,59 +59,15 @@ const LottoBuy = ({
 
     const ticketCount = priceNumber / 1000;
 
-    setIsShowLottoControl(true);
-    setLottoResultNumber(randomNumbers(ticketCount));
+    dispatch(uiActions.isShowLottoControlHandler(true));
+
+    dispatch(
+      lottoNumbersActions.submitResultNumberHandler(randomNumbers(ticketCount))
+    );
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") LottoBuyHandler();
-  };
-
-  // 가격 변경 시
-  const changePriceHandler = (event) => {
-    const value = event.target.value.trim();
-    setPrice(value);
-  };
-
-  // 순위 계산
-  const totalRankCalc = () => {
-    const numbers = Object.values(inputNumbers);
-    const inputMainNumbers = numbers.slice(0, 6).map(Number); // 입력한 번호
-    const inputBonusNumber = Number(numbers[6]);
-
-    //console.log("입력한 로또 번호 : " + inputMainNumbers + " + " + inputBonusNumber); // 확인용
-
-    const results = {
-      firstClass: 0,
-      secondClass: 0,
-      thirdClass: 0,
-      fourthClass: 0,
-      fifthClass: 0,
-    };
-
-    for (let i = 0; i < lottoResultNumber.length; i++) {
-      const numbers = lottoResultNumber[i]; // 구매한 번호
-
-      //console.log("구매한 로또 번호 : " + numbers); // 확인용
-
-      const totalCount = inputMainNumbers.filter((number) =>
-        numbers.includes(number)
-      ).length;
-
-      if (totalCount === 6) {
-        results.firstClass += 1;
-      } else if (totalCount === 5 && numbers.includes(inputBonusNumber)) {
-        results.secondClass += 1;
-      } else if (totalCount === 5) {
-        results.thirdClass += 1;
-      } else if (totalCount === 4) {
-        results.fourthClass += 1;
-      } else if (totalCount === 3) {
-        results.fifthClass += 1;
-      }
-    }
-    //console.log(results); // 확인용
-    return results;
   };
 
   return (
@@ -112,7 +78,9 @@ const LottoBuy = ({
           <BuyInput
             placeholder="1,000원 단위로 금액을 입력해 주세요."
             value={price}
-            onChange={changePriceHandler}
+            onChange={(e) =>
+              dispatch(priceActions.submitPriceHandler(e.target.value.trim()))
+            }
             ref={focusRef}
             onKeyDown={handleKeyPress}
           />
@@ -121,29 +89,15 @@ const LottoBuy = ({
         </BuyInputWrapper>
 
         <div>
-          <LottoControl
-            isShowLottoControl={isShowLottoControl}
-            setIsShowHistoryControl={setIsShowHistoryControl}
-            totalRankCalc={totalRankCalc}
-            setIsOpenLottoResultModal={setIsOpenLottoResultModal}
-            inputNumbers={inputNumbers}
-            setTotalRank={setTotalRank}
-            setPrice={setPrice}
-            setInputNumbers={setInputNumbers}
-            setLottoResultNumber={setLottoResultNumber}
-            setIsShowLottoControl={setIsShowLottoControl}
-          />
+          <LottoControlBox />
         </div>
       </div>
-      {isShowHistoryControl && (
-        <LottoBuyHistory lottoResultNumber={lottoResultNumber} />
-      )}
-      {isOpenLottoResultModal && (
+      {isShowHistoryControl && <LottoBuyHistory />}
+      {isShowLottoResultModalControl && (
         <ResultModal
-          onCloseModal={() => setIsOpenLottoResultModal(false)}
-          totalRank={totalRank}
-          price={price}
-          ticketCount={lottoResultNumber.length}
+          onCloseModal={() =>
+            dispatch(uiActions.isShowLottoResultModalControlHandler())
+          }
         />
       )}
     </>

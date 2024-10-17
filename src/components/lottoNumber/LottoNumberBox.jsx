@@ -1,13 +1,18 @@
 import styled from "styled-components";
 import InputNumber from "../ui/InputNumber";
 import { Fragment } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { lottoNumbersActions } from "../store/reducers/lottoNumbers";
 
 const LOTTO_NUMBER_ARR = new Array(7).fill(0);
 
-const LottoNumberBox = ({ inputNumbers, setInputNumbers }) => {
+const LottoNumberBox = () => {
+  const inputNumbers = useSelector((state) => state.lottoNumbers.inputNumbers);
+  const dispatch = useDispatch();
+
   const numberChangeHandler = (value, index) => {
     if (value < 0 || value > 45) return;
-    setInputNumbers((prev) => ({ ...prev, [index]: value }));
+    dispatch(lottoNumbersActions.changeNumbersHandler({ index, value }));
   };
 
   return (

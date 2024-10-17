@@ -2,8 +2,13 @@ import React from "react";
 import Button from "../ui/Button";
 import styled from "styled-components";
 
-function ResultModal(props) {
-  const { onCloseModal, totalRank, price, ticketCount } = props;
+import { useDispatch, useSelector } from "react-redux";
+import { uiActions } from "../store/reducers/ui";
+
+const ResultModal = () => {
+  const dispatch = useDispatch();
+  const totalRank = useSelector((state) => state.totalRank.totalRank);
+  const price = useSelector((state) => state.price.price);
 
   const prizesCalc = (totalRank) => {
     // 총 당첨금 : 30,000,000,000
@@ -85,7 +90,7 @@ function ResultModal(props) {
           </tbody>
         </ResultTable>
         <div>
-          <b>- 구매한 개수 : {ticketCount.toLocaleString()}장</b>
+          <b>- 구매한 개수 : {(price / 1000).toLocaleString()}장</b>
           <br />
           <b>- 총 당첨 금액 : {totalPrizes.toLocaleString()}원</b>
           <br />
@@ -93,12 +98,18 @@ function ResultModal(props) {
         </div>
 
         <ButtonWrapper>
-          <Button title="닫기" role="close" onClick={onCloseModal} />
+          <Button
+            title="닫기"
+            role="close"
+            onClick={() =>
+              dispatch(uiActions.isShowLottoResultModalControlHandler(false))
+            }
+          />
         </ButtonWrapper>
       </ModalContent>
     </ModalWrapper>
   );
-}
+};
 
 export default ResultModal;
 

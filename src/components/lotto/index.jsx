@@ -1,23 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Header from "../header";
 import LottoNumber from "../lottoNumber";
 import LottoBuy from "../lottoBuy";
 
 const Lotto = () => {
-  const [inputNumbers, setInputNumbers] = useState({});
-  const [price, setPrice] = useState("");
-  const [lottoResultNumber, setLottoResultNumber] = useState([]);
-
   return (
     <Wrapper>
       <Header title="행운의 로또" />
-      <LottoNumber inputNumberState={{ inputNumbers, setInputNumbers }} />
-      <LottoBuy
-        priceState={{ price, setPrice }}
-        lottoResultNumberState={{ lottoResultNumber, setLottoResultNumber }}
-        inputNumbersState={{ inputNumbers, setInputNumbers }}
-      />
+      <LottoNumber />
+      <LottoBuy />
     </Wrapper>
   );
 };
